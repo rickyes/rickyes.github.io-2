@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>泽阳 | 追逐繁星的孩子</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://git.zhoumq.cn/"/>
+  <updated>2017-12-01T15:31:14.000Z</updated>
+  <id>http://git.zhoumq.cn/</id>
+  
+  <author>
+    <name>Allen泽阳</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>koa2 定制化框架设计</title>
+    <link href="http://git.zhoumq.cn/2017/12/01/koa20171201/"/>
+    <id>http://git.zhoumq.cn/2017/12/01/koa20171201/</id>
+    <published>2017-11-30T20:20:48.000Z</published>
+    <updated>2017-12-01T15:31:14.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>占位</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;占位&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+      <category term="Node.js" scheme="http://git.zhoumq.cn/categories/Node-js/"/>
+    
+    
+      <category term="koa2" scheme="http://git.zhoumq.cn/tags/koa2/"/>
+    
+      <category term="Node.js" scheme="http://git.zhoumq.cn/tags/Node-js/"/>
+    
+      <category term="async/await" scheme="http://git.zhoumq.cn/tags/async-await/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JavaScript  进阶笔记</title>
+    <link href="http://git.zhoumq.cn/2017/12/01/test/"/>
+    <id>http://git.zhoumq.cn/2017/12/01/test/</id>
+    <published>2017-11-30T16:28:10.000Z</published>
+    <updated>2017-11-30T19:06:56.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="var、let、const-定义变量"><a href="#var、let、const-定义变量" class="headerlink" title="var、let、const 定义变量"></a>var、let、const 定义变量</h2><p>var 定义的变量允许变量提升（Hoisting），还涉及到 变量进行 LHS（Left Hand Side）查找<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">举个栗子：</span><br><span class="line"><span class="built_in">console</span>.log(x); <span class="comment">// var is up</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="string">'var is up'</span>;</span><br></pre></td></tr></table></figure></p><p>但是得注意一下，var声明的变量可以提升，但是如果是一个定义一个函数，函数表达式是不可以提升的，如下:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = func();</span><br><span class="line"><span class="keyword">var</span> func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'this is function'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 相当于下面的代码：</span></span><br><span class="line"><span class="keyword">var</span> func = <span class="literal">undefined</span>;</span><br><span class="line"><span class="keyword">var</span> x = func();</span><br><span class="line">func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'this is function'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>上面那段代码会被爆出TypeError,变量func被提升了，但是后面的函数表达式没被提升，提升的func的初始化是var func = undefined,上面的操作相当于undefined(),所以就爆TypeError了;</p><h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><p>var 并不是块级作用域，所以容易造成作用域污染，在全局作用域下用var定义一个变量会被挂载到global或window中,看下面这段代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)&#123;&#125;</span><br><span class="line">    <span class="built_in">console</span>.log(i); <span class="comment">// 3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>上面那段代码，在}外依旧能访问到 i 。<br>let 是块级作用域，而且在全局作用域定义的变量并不会被挂载到global货window中：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)&#123;&#125;</span><br><span class="line">    <span class="built_in">console</span>.log(i); <span class="comment">// i is defined</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>const 是定义常量，和java的final关键字类似，但是有一点区别的是，const定义的如果的对象，则对象里面的参数值是可以改变的，const的作用是保证初始定义的变量的内存地址是不变的。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">1</span>;</span><br><span class="line">a = <span class="number">2</span>; <span class="comment">// Assignment to constant variable</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line">obj.a = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj.a); <span class="comment">// 1</span></span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;var、let、const-定义变量&quot;&gt;&lt;a href=&quot;#var、let、const-定义变量&quot; class=&quot;headerlink&quot; title=&quot;var、let、const 定义变量&quot;&gt;&lt;/a&gt;var、let、const 定义变量&lt;/h2&gt;&lt;p&gt;var 定义
+      
+    
+    </summary>
+    
+      <category term="JavsScript" scheme="http://git.zhoumq.cn/categories/JavsScript/"/>
+    
+    
+      <category term="JavaScript" scheme="http://git.zhoumq.cn/tags/JavaScript/"/>
+    
+      <category term="let" scheme="http://git.zhoumq.cn/tags/let/"/>
+    
+      <category term="const" scheme="http://git.zhoumq.cn/tags/const/"/>
+    
+      <category term="var" scheme="http://git.zhoumq.cn/tags/var/"/>
+    
+  </entry>
+  
+</feed>

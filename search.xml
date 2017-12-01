@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[koa2 定制化框架设计]]></title>
+    <url>%2F2017%2F12%2F01%2Fkoa20171201%2F</url>
+    <content type="text"><![CDATA[占位]]></content>
+      <categories>
+        <category>Node.js</category>
+      </categories>
+      <tags>
+        <tag>koa2</tag>
+        <tag>Node.js</tag>
+        <tag>async/await</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[JavaScript 进阶笔记]]></title>
+    <url>%2F2017%2F12%2F01%2Ftest%2F</url>
+    <content type="text"><![CDATA[var、let、const 定义变量var 定义的变量允许变量提升（Hoisting），还涉及到 变量进行 LHS（Left Hand Side）查找123举个栗子：console.log(x); // var is upvar x = 'var is up'; 但是得注意一下，var声明的变量可以提升，但是如果是一个定义一个函数，函数表达式是不可以提升的，如下:12345678910var x = func();var func = function()&#123; return 'this is function';&#125;// 相当于下面的代码：var func = undefined;var x = func();func = function()&#123; return 'this is function';&#125; 上面那段代码会被爆出TypeError,变量func被提升了，但是后面的函数表达式没被提升，提升的func的初始化是var func = undefined,上面的操作相当于undefined(),所以就爆TypeError了; 作用域var 并不是块级作用域，所以容易造成作用域污染，在全局作用域下用var定义一个变量会被挂载到global或window中,看下面这段代码：1234function test()&#123; for(var i = 0; i &lt; 3; i++)&#123;&#125; console.log(i); // 3&#125; 上面那段代码，在}外依旧能访问到 i 。let 是块级作用域，而且在全局作用域定义的变量并不会被挂载到global货window中：1234function test()&#123; for(let i = 0; i &lt; 3; i++)&#123;&#125; console.log(i); // i is defined&#125; const 是定义常量，和java的final关键字类似，但是有一点区别的是，const定义的如果的对象，则对象里面的参数值是可以改变的，const的作用是保证初始定义的变量的内存地址是不变的。123456const a = 1;a = 2; // Assignment to constant variableconst obj = &#123;&#125;;obj.a = 1;console.log(obj.a); // 1]]></content>
+      <categories>
+        <category>JavsScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+        <tag>let</tag>
+        <tag>const</tag>
+        <tag>var</tag>
+      </tags>
+  </entry>
+</search>
