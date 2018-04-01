@@ -62,7 +62,7 @@
 
 
 
-  <meta name="keywords" content="JavaScript,let,const,var," />
+  <meta name="keywords" content="JavaScript,defineProperty,Type,call,typeof,instanceof," />
 
 
 
@@ -75,18 +75,18 @@
 
 
 
-<meta name="description" content="var、let、const 定义变量var 定义的变量允许变量提升（Hoisting），还涉及到 变量进行 LHS（Left Hand Side）查找123举个栗子：console.log(x); // var is upvar x = &apos;var is up&apos;; 但是得注意一下，var声明的变量可以">
-<meta name="keywords" content="JavaScript,let,const,var">
+<meta name="description" content="类型首先贴下ECMA定义的类型 基本数据类型：  Number（数字） String（字符串） Boolean（布尔） Symbol（符号）（第六版新增） Null（空） Undefined（未定义）  复杂数据类型:  Object  Object 包含：  Function（函数） Array（数组） Date（日">
+<meta name="keywords" content="JavaScript,defineProperty,Type,call,typeof,instanceof">
 <meta property="og:type" content="article">
-<meta property="og:title" content="变量声明之旅">
-<meta property="og:url" content="http://git.zhoumq.cn/2017/12/01/test/index.html">
+<meta property="og:title" content="JS类型检测">
+<meta property="og:url" content="http://git.zhoumq.cn/2018/04/01/type20180401/index.html">
 <meta property="og:site_name" content="泽阳 | 追逐繁星的孩子">
-<meta property="og:description" content="var、let、const 定义变量var 定义的变量允许变量提升（Hoisting），还涉及到 变量进行 LHS（Left Hand Side）查找123举个栗子：console.log(x); // var is upvar x = &apos;var is up&apos;; 但是得注意一下，var声明的变量可以提升，但是如果是一个定义一个函数，函数表达式是不可以提升的，如下:12345678910var x">
+<meta property="og:description" content="类型首先贴下ECMA定义的类型 基本数据类型：  Number（数字） String（字符串） Boolean（布尔） Symbol（符号）（第六版新增） Null（空） Undefined（未定义）  复杂数据类型:  Object  Object 包含：  Function（函数） Array（数组） Date（日期） RegExp（正则表达式） Error (错误)  typeoftypeo">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-01T09:06:37.000Z">
+<meta property="og:updated_time" content="2018-04-01T10:27:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="变量声明之旅">
-<meta name="twitter:description" content="var、let、const 定义变量var 定义的变量允许变量提升（Hoisting），还涉及到 变量进行 LHS（Left Hand Side）查找123举个栗子：console.log(x); // var is upvar x = &apos;var is up&apos;; 但是得注意一下，var声明的变量可以提升，但是如果是一个定义一个函数，函数表达式是不可以提升的，如下:12345678910var x">
+<meta name="twitter:title" content="JS类型检测">
+<meta name="twitter:description" content="类型首先贴下ECMA定义的类型 基本数据类型：  Number（数字） String（字符串） Boolean（布尔） Symbol（符号）（第六版新增） Null（空） Undefined（未定义）  复杂数据类型:  Object  Object 包含：  Function（函数） Array（数组） Date（日期） RegExp（正则表达式） Error (错误)  typeoftypeo">
 
 
 
@@ -116,13 +116,13 @@
 
 
 
-  <link rel="canonical" href="http://git.zhoumq.cn/2017/12/01/test/"/>
+  <link rel="canonical" href="http://git.zhoumq.cn/2018/04/01/type20180401/"/>
 
 
 
 
 
-  <title>变量声明之旅 | 泽阳 | 追逐繁星的孩子</title>
+  <title>JS类型检测 | 泽阳 | 追逐繁星的孩子</title>
   
 
 
@@ -293,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://git.zhoumq.cn/2017/12/01/test/">
+    <link itemprop="mainEntityOfPage" href="http://git.zhoumq.cn/2018/04/01/type20180401/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Allen泽阳">
@@ -310,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">变量声明之旅</h1>
+          <h1 class="post-title" itemprop="name headline">JS类型检测</h1>
         
 
         <div class="post-meta">
@@ -322,8 +322,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-01T00:28:10+08:00">
-                2017-12-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-01T17:08:37+08:00">
+                2018-04-01
               </time>
             
 
@@ -362,7 +362,7 @@
 
           
           
-             <span id="/2017/12/01/test/" class="leancloud_visitors" data-flag-title="变量声明之旅">
+             <span id="/2018/04/01/type20180401/" class="leancloud_visitors" data-flag-title="JS类型检测">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -393,14 +393,36 @@
       
 
       
-        <h2 id="var、let、const-定义变量"><a href="#var、let、const-定义变量" class="headerlink" title="var、let、const 定义变量"></a>var、let、const 定义变量</h2><p>var 定义的变量允许变量提升（Hoisting），还涉及到 变量进行 LHS（Left Hand Side）查找<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">举个栗子：</span><br><span class="line"><span class="built_in">console</span>.log(x); <span class="comment">// var is up</span></span><br><span class="line"><span class="keyword">var</span> x = <span class="string">'var is up'</span>;</span><br></pre></td></tr></table></figure></p>
-<p>但是得注意一下，var声明的变量可以提升，但是如果是一个定义一个函数，函数表达式是不可以提升的，如下:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = func();</span><br><span class="line"><span class="keyword">var</span> func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'this is function'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 相当于下面的代码：</span></span><br><span class="line"><span class="keyword">var</span> func;</span><br><span class="line"><span class="keyword">var</span> x = func();</span><br><span class="line">func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'this is function'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上面那段代码会被爆出TypeError,变量func被提升了，但是后面的函数表达式没被提升，提升的func的初始化是var func = undefined,上面的操作相当于undefined(),所以就爆TypeError了;</p>
-<h2 id="函数声明和函数表达式声明"><a href="#函数声明和函数表达式声明" class="headerlink" title="函数声明和函数表达式声明"></a>函数声明和函数表达式声明</h2><p>函数声明会整体提升到当前作用域的顶端，而函数表达式声明只提升变量名，表达式并不会提升（栗子看上面👆代码），举个🌰 ：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">test() <span class="comment">// 1</span></span><br><span class="line">test2() <span class="comment">// TypeError</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数声明</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数表达式声明</span></span><br><span class="line"><span class="keyword">var</span> test2 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><p>var 并不是块级作用域，所以容易造成作用域污染，在全局作用域下用var定义一个变量会被挂载到global或window中,看下面这段代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)&#123;&#125;</span><br><span class="line">    <span class="built_in">console</span>.log(i); <span class="comment">// 3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上面那段代码，在}外依旧能访问到 i 。<br>let 是块级作用域，而且在全局作用域定义的变量并不会被挂载到global货window中：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)&#123;&#125;</span><br><span class="line">    <span class="built_in">console</span>.log(i); <span class="comment">// i is defined</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>const 是定义常量，和java的final关键字类似，但是有一点区别的是，const定义的如果的对象，则对象里面的参数值是可以改变的，const的作用是保证初始定义的变量的内存地址是不变的。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">1</span>;</span><br><span class="line">a = <span class="number">2</span>; <span class="comment">// Assignment to constant variable</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line">obj.a = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj.a); <span class="comment">// 1</span></span><br></pre></td></tr></table></figure></p>
-<p>PS: 能用const定义的就用const</p>
+        <h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><p>首先贴下ECMA定义的类型</p>
+<p>基本数据类型：</p>
+<ul>
+<li>Number（数字）</li>
+<li>String（字符串）</li>
+<li>Boolean（布尔）</li>
+<li>Symbol（符号）（第六版新增）</li>
+<li>Null（空）</li>
+<li>Undefined（未定义）</li>
+</ul>
+<p>复杂数据类型:</p>
+<ul>
+<li>Object</li>
+</ul>
+<p>Object 包含：</p>
+<ul>
+<li>Function（函数）</li>
+<li>Array（数组）</li>
+<li>Date（日期）</li>
+<li>RegExp（正则表达式）</li>
+<li>Error (错误)</li>
+</ul>
+<h2 id="typeof"><a href="#typeof" class="headerlink" title="typeof"></a>typeof</h2><p>typeof 是一元运算符，返回时数据的类型字符串，看代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> number  = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">let</span> str = <span class="string">'str'</span>;</span><br><span class="line"><span class="keyword">let</span> func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line"><span class="keyword">let</span> arr = [];</span><br><span class="line"><span class="keyword">let</span> obj = &#123;&#125;;</span><br><span class="line"><span class="keyword">let</span> bool = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">let</span> unde = <span class="literal">undefined</span>;</span><br><span class="line"><span class="keyword">let</span> na = <span class="literal">NaN</span>;</span><br><span class="line"><span class="keyword">let</span> sy = <span class="built_in">Symbol</span>(<span class="string">'test'</span>);</span><br><span class="line"><span class="keyword">let</span> nu = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> number); <span class="comment">// number</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> str); <span class="comment">// string</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> func); <span class="comment">// function</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> arr); <span class="comment">// object</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> obj); <span class="comment">// object</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> bool); <span class="comment">// boolean</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> unde); <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> na); <span class="comment">// number</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> sy); <span class="comment">// symbol</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> nu); <span class="comment">// object</span></span><br></pre></td></tr></table></figure></p>
+<p>typeof 能静准的判断基本数据类型，却不能精准的判断引用数据类型</p>
+<h2 id="instanceof"><a href="#instanceof" class="headerlink" title="instanceof"></a>instanceof</h2><p>instanceof 运算符用来检测 constructor.prototype 是否存在于参数 object 的原型链上。就是检查是否属于某个目标的实例<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">c</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">d</span>(<span class="params"></span>)</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> cc = <span class="keyword">new</span> c();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(cc <span class="keyword">instanceof</span> c); <span class="comment">// true 因为 Object.getPrototypeOf(o) === C.prototype</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(cc <span class="keyword">instanceof</span> d); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(cc <span class="keyword">instanceof</span> <span class="built_in">Object</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(d <span class="keyword">instanceof</span> <span class="built_in">Object</span>); <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">c.prototype = &#123;&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(cc <span class="keyword">instanceof</span> c); <span class="comment">// false c.prototype指向了一个空对象,这个空对象不在cc的原型链上</span></span><br></pre></td></tr></table></figure></p>
+<p>instanceof 只能检测是否是目标的实例（处于目标的原型链上）</p>
+<h2 id="Object-prototype-toString-call"><a href="#Object-prototype-toString-call" class="headerlink" title="Object.prototype.toString.call"></a>Object.prototype.toString.call</h2><p>让检测对象的prototype上有Object.prototype的toString方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> number  = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">let</span> str = <span class="string">'str'</span>;</span><br><span class="line"><span class="keyword">let</span> func = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line"><span class="keyword">let</span> arr = [];</span><br><span class="line"><span class="keyword">let</span> obj = &#123;&#125;;</span><br><span class="line"><span class="keyword">let</span> bool = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">let</span> unde = <span class="literal">undefined</span>;</span><br><span class="line"><span class="keyword">let</span> na = <span class="literal">NaN</span>;</span><br><span class="line"><span class="keyword">let</span> sy = <span class="built_in">Symbol</span>(<span class="string">'test'</span>);</span><br><span class="line"><span class="keyword">let</span> nu = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> toString = <span class="built_in">Object</span>.prototype.toString;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(number)); <span class="comment">// [object Number]</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(str)); <span class="comment">// [object String]</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(func)); <span class="comment">// [object Function]</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(arr)); <span class="comment">// [object Array]</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(obj));  <span class="comment">// [object Object]</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(bool));  <span class="comment">// [object Boolean]</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(unde)); <span class="comment">// [object Undefined]</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(na)); <span class="comment">// [object Number]</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(sy)); <span class="comment">// [object Symbol]</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(toString.call(nu)); <span class="comment">// [object Null]</span></span><br></pre></td></tr></table></figure>
+<p>完美~</p>
+<p>安利一个函数检测数据类型：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isType</span>(<span class="params">val,type</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Object</span>.prototype.toString.call(val) === <span class="string">`[object <span class="subst">$&#123;type&#125;</span>]`</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Type = <span class="built_in">Object</span>.defineProperties(&#123;&#125;,&#123;</span><br><span class="line">  <span class="string">'Array'</span>: &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    value: <span class="string">'Array'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">'Object'</span>: &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    value: <span class="string">'Object'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">'Function'</span>: &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    value: <span class="string">'Function'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">'String'</span>: &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    value: <span class="string">'String'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">'Number'</span>: &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    value: <span class="string">'Number'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">'Boolean'</span>: &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    value: <span class="string">'Boolean'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">'Symbol'</span>: &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    value: <span class="string">'Symbol'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">'Undefined'</span>: &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    value: <span class="string">'Undefined'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">'Null'</span>: &#123;</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    value: <span class="string">'Null'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="built_in">console</span>.log(isType(number,Type.Number));</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(isType(str,Type.String));</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(isType(func,Type.Function));</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(isType(arr,Type.Array));</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(isType(obj,Type.Object));</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(isType(bool,Type.Boolean));</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(isType(unde,Type.Undefined));</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(isType(sy,Type.Symbol));</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(isType(nu,Type.Null));</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -420,11 +442,15 @@
           
             <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
           
-            <a href="/tags/let/" rel="tag"># let</a>
+            <a href="/tags/defineProperty/" rel="tag"># defineProperty</a>
           
-            <a href="/tags/const/" rel="tag"># const</a>
+            <a href="/tags/Type/" rel="tag"># Type</a>
           
-            <a href="/tags/var/" rel="tag"># var</a>
+            <a href="/tags/call/" rel="tag"># call</a>
+          
+            <a href="/tags/typeof/" rel="tag"># typeof</a>
+          
+            <a href="/tags/instanceof/" rel="tag"># instanceof</a>
           
         </div>
       
@@ -437,15 +463,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/04/01/defind20180401/" rel="next" title="should.js 写法实现">
+                <i class="fa fa-chevron-left"></i> should.js 写法实现
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/01/Object20180401/" rel="prev" title="JS对象属性探究">
-                JS对象属性探究 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -602,7 +628,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#var、let、const-定义变量"><span class="nav-number">1.</span> <span class="nav-text">var、let、const 定义变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数声明和函数表达式声明"><span class="nav-number">2.</span> <span class="nav-text">函数声明和函数表达式声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域"><span class="nav-number">3.</span> <span class="nav-text">作用域</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类型"><span class="nav-number">1.</span> <span class="nav-text">类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#typeof"><span class="nav-number">2.</span> <span class="nav-text">typeof</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#instanceof"><span class="nav-number">3.</span> <span class="nav-text">instanceof</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-prototype-toString-call"><span class="nav-number">4.</span> <span class="nav-text">Object.prototype.toString.call</span></a></li></ol></div>
             
 
           </div>
