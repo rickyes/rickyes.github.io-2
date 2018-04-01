@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://git.zhoumq.cn/"/>
-  <updated>2017-12-01T15:31:14.000Z</updated>
+  <updated>2018-04-01T09:02:23.000Z</updated>
   <id>http://git.zhoumq.cn/</id>
   
   <author>
@@ -17,32 +17,58 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>koa2 定制化框架设计</title>
-    <link href="http://git.zhoumq.cn/2017/12/01/koa20171201/"/>
-    <id>http://git.zhoumq.cn/2017/12/01/koa20171201/</id>
-    <published>2017-11-30T20:20:48.000Z</published>
-    <updated>2017-12-01T15:31:14.000Z</updated>
+    <title>should.js 写法实现</title>
+    <link href="http://git.zhoumq.cn/2018/04/01/defind20180401/"/>
+    <id>http://git.zhoumq.cn/2018/04/01/defind20180401/</id>
+    <published>2018-04-01T08:27:17.000Z</published>
+    <updated>2018-04-01T09:02:23.000Z</updated>
     
-    <content type="html"><![CDATA[<p>占位</p>]]></content>
+    <content type="html"><![CDATA[<h2 id="关于-should-js"><a href="#关于-should-js" class="headerlink" title="关于 should.js"></a>关于 should.js</h2><p>先上代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> should = <span class="built_in">require</span>(<span class="string">'should'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> user = &#123;</span><br><span class="line">    name: <span class="string">'tj'</span></span><br><span class="line">  , <span class="attr">pets</span>: [<span class="string">'tobi'</span>, <span class="string">'loki'</span>, <span class="string">'jane'</span>, <span class="string">'bandit'</span>]</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">user.should.have.property(<span class="string">'name'</span>, <span class="string">'tj'</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure></p><p>看到这样的写法是不是很酷炫，反正我当时就是，我们来一步一步实现它。</p><h2 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h2><p>首先user这个对象本身是没有should这个属性的，那就肯定是往原型链上找了，所以事先把这个属性挂载到Object.prototype上</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1、</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">tool</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>._obj = obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2、</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(<span class="built_in">Object</span>.prototype,<span class="string">'tool'</span>,&#123;</span><br><span class="line">  get: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> tool(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><ul><li>1、先定义一个函数，将调用对象的this当做tool函数的内部对象传入</li><li>2、在Object.prototype上定义一个名为为tool的属性，设置这个属性的get访问拦截返回通过构造函数实例化的tool</li></ul><p>看看效果<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> tool = <span class="built_in">require</span>(<span class="string">'./lib/defind'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span>  user = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="string">'test'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(user.tool); <span class="comment">// 3、</span></span><br></pre></td></tr></table></figure></p><ul><li>3、打印了  <code>tool { _obj: { a: 1, b: &#39;test&#39; } }</code></li></ul><p>就是这么简单实现了这种酷炫的写法，添加一个tool的方法判断调用对象是否有该属性<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tool.prototype.has = <span class="function"><span class="keyword">function</span>(<span class="params">key</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>._obj.hasOwnProperty(key);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><ul><li>4、刚才在tool函数里保存的_obj现在起作用了</li></ul><p>console一下</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> has = user.tool.has(<span class="string">'a'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(has); <span class="comment">// true</span></span><br><span class="line">has = user.tool.has(<span class="string">'c'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(has); <span class="comment">// false</span></span><br></pre></td></tr></table></figure><p>剩下的api有兴趣的朋友自己实现吧~</p><p>参考链接：</p><ul><li><a href="https://github.com/tj/should.js" target="_blank" rel="noopener">https://github.com/tj/should.js</a></li></ul>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;占位&lt;/p&gt;
-
+        &lt;h2 id=&quot;关于-should-js&quot;&gt;&lt;a href=&quot;#关于-should-js&quot; class=&quot;headerlink&quot; title=&quot;关于 should.js&quot;&gt;&lt;/a&gt;关于 should.js&lt;/h2&gt;&lt;p&gt;先上代码&lt;br&gt;&lt;figure class=&quot;highlig
       
     
     </summary>
     
-      <category term="Node.js" scheme="http://git.zhoumq.cn/categories/Node-js/"/>
+      <category term="JavsScript" scheme="http://git.zhoumq.cn/categories/JavsScript/"/>
     
     
-      <category term="koa2" scheme="http://git.zhoumq.cn/tags/koa2/"/>
+      <category term="JavaScript" scheme="http://git.zhoumq.cn/tags/JavaScript/"/>
     
-      <category term="Node.js" scheme="http://git.zhoumq.cn/tags/Node-js/"/>
+      <category term="defineProperty" scheme="http://git.zhoumq.cn/tags/defineProperty/"/>
     
-      <category term="async/await" scheme="http://git.zhoumq.cn/tags/async-await/"/>
+      <category term="Object.prototype" scheme="http://git.zhoumq.cn/tags/Object-prototype/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JS对象属性探究</title>
+    <link href="http://git.zhoumq.cn/2018/04/01/Object20180401/"/>
+    <id>http://git.zhoumq.cn/2018/04/01/Object20180401/</id>
+    <published>2018-04-01T08:17:09.000Z</published>
+    <updated>2018-04-01T08:20:05.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><p>ECMAScript 将对象的属性分为数据属性和访问器属性,属性描述符有两种主要形式：数据描述符和存取描述符,<br>使用defineProperty可以为对象已有的属性添加特性描述：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var obj = &#123;</span><br><span class="line">    test:&quot;hello&quot;</span><br><span class="line">&#125;</span><br><span class="line">//对象已有的属性添加特性描述</span><br><span class="line">Object.defineProperty(obj,&quot;test&quot;,&#123;</span><br><span class="line">    configurable:true | false, // 是否可以删除目标属性或是否可以再次修改属性的特性（writable, configurable, enumerable）</span><br><span class="line">    enumerable:true | false, // 是否可枚举</span><br><span class="line">    value:任意类型的值,</span><br><span class="line">    writable:true | false // 属性的值是否可以被重写</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p><p>ES5有三个操作会忽略enumerable为false的属性：</p><ul><li>for…in循环：只遍历对象自身的和继承的可枚举的属性</li><li>Object.keys()：返回对象自身的所有可枚举的属性的键名</li><li>JSON.stringify()：只串行化对象自身的可枚举的属性</li></ul><p>Object.getOwnPropertyNames获取该对象不包括原型链所有的属性包括不可枚举的<br>ES6新增了一个操作Object.assign()，会忽略enumerable为false的属性，只拷贝对象自身的可枚举的属性。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Object.getOwnPropertyDescriptor(Object.prototype, &apos;toString&apos;).enumerable</span><br><span class="line">// false</span><br><span class="line"></span><br><span class="line">Object.prototype.propertyIsEnumerable(&apos;toString&apos;) // false</span><br><span class="line"></span><br><span class="line">Object.getOwnPropertyDescriptor([], &apos;length&apos;).enumerable</span><br><span class="line">// false</span><br><span class="line"></span><br><span class="line">[].propertyIsEnumerable(&apos;length&apos;) // false</span><br></pre></td></tr></table></figure></p><p>toString和length属性的enumerable都是false，因此for…in不会遍历到这两个继承自原型的属性。</p><blockquote><p>当使用了getter或setter方法，不允许使用writable和value这两个属性。</p></blockquote><p>ES5 环境，Object.keys如果传入的参数不是一个对象，而是一个字符串，那么它会报 TypeError。在 ES6 环境，如果传入的是一个非对象参数，内部会对参数作一次强制对象转换，如果转换不成功会抛出 TypeError。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 在 ES5 环境</span><br><span class="line">Object.keys(&apos;foo&apos;); // TypeError: &quot;foo&quot; is not an object</span><br><span class="line"></span><br><span class="line">// 在 ES6 环境</span><br><span class="line">Object.keys(&apos;foo&apos;); // [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;]</span><br></pre></td></tr></table></figure></p><p>参考链接：</p><ul><li><a href="https://www.zhihu.com/question/40648241?from=profile_question_card" target="_blank" rel="noopener">https://www.zhihu.com/question/40648241?from=profile_question_card</a></li><li><a href="https://www.cnblogs.com/wujie520303/p/4931384.html" target="_blank" rel="noopener">https://www.cnblogs.com/wujie520303/p/4931384.html</a></li><li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;对象&quot;&gt;&lt;a href=&quot;#对象&quot; class=&quot;headerlink&quot; title=&quot;对象&quot;&gt;&lt;/a&gt;对象&lt;/h2&gt;&lt;p&gt;ECMAScript 将对象的属性分为数据属性和访问器属性,属性描述符有两种主要形式：数据描述符和存取描述符,&lt;br&gt;使用definePro
+      
+    
+    </summary>
+    
+      <category term="JavsScript" scheme="http://git.zhoumq.cn/categories/JavsScript/"/>
+    
+    
+      <category term="JavaScript" scheme="http://git.zhoumq.cn/tags/JavaScript/"/>
+    
+      <category term="Object" scheme="http://git.zhoumq.cn/tags/Object/"/>
     
   </entry>
   

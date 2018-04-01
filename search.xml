@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[koa2 定制化框架设计]]></title>
-    <url>%2F2017%2F12%2F01%2Fkoa20171201%2F</url>
-    <content type="text"><![CDATA[占位]]></content>
+    <title><![CDATA[should.js 写法实现]]></title>
+    <url>%2F2018%2F04%2F01%2Fdefind20180401%2F</url>
+    <content type="text"><![CDATA[关于 should.js先上代码12345678var should = require('should');var user = &#123; name: 'tj' , pets: ['tobi', 'loki', 'jane', 'bandit']&#125;;user.should.have.property('name', 'tj'); // true 看到这样的写法是不是很酷炫，反正我当时就是，我们来一步一步实现它。 原型链首先user这个对象本身是没有should这个属性的，那就肯定是往原型链上找了，所以事先把这个属性挂载到Object.prototype上 1234567891011// 1、function tool(obj)&#123; this._obj = obj;&#125;// 2、Object.defineProperty(Object.prototype,'tool',&#123; get: function()&#123; return new tool(this); &#125;&#125;); 1、先定义一个函数，将调用对象的this当做tool函数的内部对象传入 2、在Object.prototype上定义一个名为为tool的属性，设置这个属性的get访问拦截返回通过构造函数实例化的tool 看看效果123456789const tool = require('./lib/defind');const user = &#123; a: 1, b: 'test'&#125;;console.log(user.tool); // 3、 3、打印了 tool { _obj: { a: 1, b: &#39;test&#39; } } 就是这么简单实现了这种酷炫的写法，添加一个tool的方法判断调用对象是否有该属性123tool.prototype.has = function(key)&#123; return this._obj.hasOwnProperty(key);&#125; 4、刚才在tool函数里保存的_obj现在起作用了 console一下 1234let has = user.tool.has('a');console.log(has); // truehas = user.tool.has('c');console.log(has); // false 剩下的api有兴趣的朋友自己实现吧~ 参考链接： https://github.com/tj/should.js]]></content>
       <categories>
-        <category>Node.js</category>
+        <category>JavsScript</category>
       </categories>
       <tags>
-        <tag>koa2</tag>
-        <tag>Node.js</tag>
-        <tag>async/await</tag>
+        <tag>JavaScript</tag>
+        <tag>defineProperty</tag>
+        <tag>Object.prototype</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[JS对象属性探究]]></title>
+    <url>%2F2018%2F04%2F01%2FObject20180401%2F</url>
+    <content type="text"><![CDATA[对象ECMAScript 将对象的属性分为数据属性和访问器属性,属性描述符有两种主要形式：数据描述符和存取描述符,使用defineProperty可以为对象已有的属性添加特性描述：12345678910var obj = &#123; test:&quot;hello&quot;&#125;//对象已有的属性添加特性描述Object.defineProperty(obj,&quot;test&quot;,&#123; configurable:true | false, // 是否可以删除目标属性或是否可以再次修改属性的特性（writable, configurable, enumerable） enumerable:true | false, // 是否可枚举 value:任意类型的值, writable:true | false // 属性的值是否可以被重写&#125;); ES5有三个操作会忽略enumerable为false的属性： for…in循环：只遍历对象自身的和继承的可枚举的属性 Object.keys()：返回对象自身的所有可枚举的属性的键名 JSON.stringify()：只串行化对象自身的可枚举的属性 Object.getOwnPropertyNames获取该对象不包括原型链所有的属性包括不可枚举的ES6新增了一个操作Object.assign()，会忽略enumerable为false的属性，只拷贝对象自身的可枚举的属性。123456789Object.getOwnPropertyDescriptor(Object.prototype, &apos;toString&apos;).enumerable// falseObject.prototype.propertyIsEnumerable(&apos;toString&apos;) // falseObject.getOwnPropertyDescriptor([], &apos;length&apos;).enumerable// false[].propertyIsEnumerable(&apos;length&apos;) // false toString和length属性的enumerable都是false，因此for…in不会遍历到这两个继承自原型的属性。 当使用了getter或setter方法，不允许使用writable和value这两个属性。 ES5 环境，Object.keys如果传入的参数不是一个对象，而是一个字符串，那么它会报 TypeError。在 ES6 环境，如果传入的是一个非对象参数，内部会对参数作一次强制对象转换，如果转换不成功会抛出 TypeError。12345// 在 ES5 环境Object.keys(&apos;foo&apos;); // TypeError: &quot;foo&quot; is not an object// 在 ES6 环境Object.keys(&apos;foo&apos;); // [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;] 参考链接： https://www.zhihu.com/question/40648241?from=profile_question_card https://www.cnblogs.com/wujie520303/p/4931384.html https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Inheritance_and_the_prototype_chain]]></content>
+      <categories>
+        <category>JavsScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+        <tag>Object</tag>
       </tags>
   </entry>
   <entry>
