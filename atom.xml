@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://git.zhoumq.cn/"/>
-  <updated>2018-04-01T10:27:03.000Z</updated>
+  <updated>2018-04-05T06:55:46.000Z</updated>
   <id>http://git.zhoumq.cn/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>配置gzip压缩文件</title>
+    <link href="http://git.zhoumq.cn/2018/04/05/gzip20180405/"/>
+    <id>http://git.zhoumq.cn/2018/04/05/gzip20180405/</id>
+    <published>2018-04-05T06:39:58.000Z</published>
+    <updated>2018-04-05T06:55:46.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="gzip"><a href="#gzip" class="headerlink" title="gzip"></a>gzip</h2><p>由于网络等原因前端页面加载速度慢，有种办法就是开启<code>nginx</code>的<code>gzip</code>，压缩资源文件，前端下载完了自会解压</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 开启gzip</span></span><br><span class="line">gzip off;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启用gzip压缩的最小文件，小于设置值的文件将不会压缩</span></span><br><span class="line">gzip_min_length 1k;</span><br><span class="line"></span><br><span class="line"><span class="comment"># gzip 压缩级别，1-9，数字越大压缩的越好，也越占用CPU时间(压缩级别越高CPU计算越久)</span></span><br><span class="line">gzip_comp_level 1;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进行压缩的文件类型。javascript有多种形式。其中的值可以在 mime.types 文件中找到。</span></span><br><span class="line">gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png application/vnd.ms-fontobject font/ttf font/opentype font/x-woff image/svg+xml;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 是否在http header中添加Vary: Accept-Encoding，建议开启</span></span><br><span class="line">gzip_vary on;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 禁用IE 6 gzip</span></span><br><span class="line">gzip_disable <span class="string">"MSIE [1-6]\."</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置压缩所需要的缓冲区大小     </span></span><br><span class="line">gzip_buffers 32 4k;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置gzip压缩针对的HTTP协议版本</span></span><br><span class="line">gzip_http_version 1.0;</span><br></pre></td></tr></table></figure><p>开启gzip后，可以适当的调节压缩级别<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 记得测试配置文件是否正常：</span></span><br><span class="line">./nginx -t </span><br><span class="line"><span class="comment"># 平滑重启</span></span><br><span class="line">./nginx -s reload</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;gzip&quot;&gt;&lt;a href=&quot;#gzip&quot; class=&quot;headerlink&quot; title=&quot;gzip&quot;&gt;&lt;/a&gt;gzip&lt;/h2&gt;&lt;p&gt;由于网络等原因前端页面加载速度慢，有种办法就是开启&lt;code&gt;nginx&lt;/code&gt;的&lt;code&gt;gzip&lt;/code&gt;，
+      
+    
+    </summary>
+    
+      <category term="Nginx" scheme="http://git.zhoumq.cn/categories/Nginx/"/>
+    
+    
+      <category term="nginx" scheme="http://git.zhoumq.cn/tags/nginx/"/>
+    
+      <category term="gzip" scheme="http://git.zhoumq.cn/tags/gzip/"/>
+    
+  </entry>
   
   <entry>
     <title>JS类型检测</title>
